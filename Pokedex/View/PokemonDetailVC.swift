@@ -40,6 +40,7 @@ class PokemonDetailVC: UIViewController {
     private func setUpLayout() {
         
         navigationItem.title = "#\(pokemon?.id.description ?? "") \(pokemon?.name ?? "")"
+        view.backgroundColor = .white
         view.addSubview(safeAreaView)
         
         safeAreaView
