@@ -55,9 +55,12 @@ class PokemonListCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        pokemonName = ""
-        pokemonId = ""
-        pokemonImageUrl = ""
+        pokemonImageView.image = nil
+        titleLabel.text = nil
+        descriptionLabel.text = nil
+        pokemonName = nil
+        pokemonId = nil
+        pokemonImageUrl = nil
     }
     
     func setupLayout() {

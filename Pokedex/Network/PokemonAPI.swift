@@ -8,6 +8,15 @@
 import Foundation
 import Combine
 
+class API {
+    static let baseURL = URL(string: "https://pokeapi.co/api/v2/")!
+    static var cancellables = Set<AnyCancellable>()
+    
+    enum ItemType: String {
+        case pokemons = "pokemon"
+    }
+}
+
 final class PokemonAPI: API {
     
     private static var pokemonResponse: APIResponse?
@@ -20,7 +29,7 @@ final class PokemonAPI: API {
         }
         .eraseToAnyPublisher()
         .sink { result in
-            completion(result)
+            completion(result.map { res in res.sorted { $0.id < $1.id } })
         }.store(in: &cancellables)
     }
 }
@@ -50,3 +59,15 @@ extension PokemonAPI {
         }.eraseToAnyPublisher()
     }
 }
+
+struct NetworkAgent {
+    static func execute<T: Decodable>(_ request: URLRequest) -> AnyPublisher<T, Error> {
+        URLSession.shared.dataTaskPublisher(for: request)
+            .tryMap {
+                return $0.data
+            }
+            .decode(type: T.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+    }
+}
+

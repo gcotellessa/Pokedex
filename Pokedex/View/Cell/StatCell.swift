@@ -28,8 +28,8 @@ class StatCell: UITableViewCell {
         return view
     }()
     
-    var statKey = "prova"
-    var statValue = "prova"
+    var statKey: String?
+    var statValue: String?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -37,8 +37,8 @@ class StatCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        statKey = ""
-        statValue = ""
+        keyLabel.text = nil
+        valueLabel.text = nil
     }
     
     func setupLayout() {

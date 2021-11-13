@@ -10,7 +10,7 @@ import Combine
 
 class PokemonListVC: UIViewController {
     
-    @Published var viewModel = PokemonListViewModel()
+    var viewModel = PokemonListViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
     private lazy var safeAreaView: UIStackView = {
@@ -31,17 +31,19 @@ class PokemonListVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
+        bindViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setUpLayout()
+    }
+    
+    private func bindViewModel() {
         viewModel.$pokemons
            .receive(on: DispatchQueue.main)
            .sink { _ in
                self.tableView.reloadData()
            }.store(in: &cancellables)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        setUpLayout()
     }
     
     private func setUpLayout() {
@@ -62,7 +64,7 @@ class PokemonListVC: UIViewController {
         safeAreaView.addSubview(tableView)
                         
         tableView.equalToSuperview()
-        
+    
     }
     
 }
@@ -93,6 +95,19 @@ extension PokemonListVC: UITableViewDelegate, UITableViewDataSource {
         let isReachingEnd = scrollView.contentOffset.y >= 0
         && scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height)
         if isReachingEnd { viewModel.requestData() }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lastSectionIndex = tableView.numberOfSections - 1
+        let lastRowIndex = tableView.numberOfRows(inSection: lastSectionIndex) - 1
+        if indexPath.section ==  lastSectionIndex && indexPath.row == lastRowIndex {
+            let spinner = UIActivityIndicatorView(style: .large)
+            spinner.startAnimating()
+            spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(60))
+
+            tableView.tableFooterView = spinner
+            tableView.tableFooterView?.isHidden = false
+        }
     }
     
 }

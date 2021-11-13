@@ -24,14 +24,13 @@ class PokemonDetailVC: UIViewController {
         tableView.dataSource = self
         tableView.register(PokemonTitleCell.self, forCellReuseIdentifier: PokemonTitleCell.identifier)
         tableView.register(StatCell.self, forCellReuseIdentifier: StatCell.identifier)
+        tableView.register(ImagesCell.self, forCellReuseIdentifier: ImagesCell.identifier)
         tableView.separatorStyle = .singleLine
         return tableView
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .white
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,8 +39,7 @@ class PokemonDetailVC: UIViewController {
     
     private func setUpLayout() {
         
-        navigationItem.title = pokemon?.name
-        view.backgroundColor = .white
+        navigationItem.title = "#\(pokemon?.id.description ?? "") \(pokemon?.name ?? "")"
         view.addSubview(safeAreaView)
         
         safeAreaView
@@ -61,7 +59,7 @@ class PokemonDetailVC: UIViewController {
 extension PokemonDetailVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 6
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,12 +81,25 @@ extension PokemonDetailVC: UITableViewDelegate, UITableViewDataSource {
             cell.selectionStyle = .none
             return cell
             
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ImagesCell.identifier, for: indexPath) as? ImagesCell else { return UITableViewCell() }
+            
+            if let pokemon = pokemon {
+                cell.imagesURL.append(pokemon.sprites.backDefault ?? "")
+                cell.imagesURL.append(pokemon.sprites.frontShiny ?? "")
+                cell.imagesURL.append(pokemon.sprites.backShiny ?? "")
+            }
+            
+            cell.setupLayout()
+            cell.selectionStyle = .none
+            return cell
+            
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: StatCell.identifier, for: indexPath) as? StatCell else { return UITableViewCell() }
             
             if let pokemon = pokemon {
-                cell.statKey = pokemon.stats[indexPath.row - 1].stat.name
-                cell.statValue = "\(pokemon.stats[indexPath.row - 1].baseStat) / 100"
+                cell.statKey = pokemon.stats[indexPath.row - 2].stat.name
+                cell.statValue = "\(pokemon.stats[indexPath.row - 2].baseStat) / 100"
             }
             
             cell.setupLayout()

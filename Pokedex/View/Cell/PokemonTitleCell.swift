@@ -45,9 +45,9 @@ class PokemonTitleCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        pokemonImageUrl = ""
-        pokemonName = ""
-        pokemonDescription = ""
+        pokemonImageView.image = nil
+        titleLabel.text = nil
+        descriptionLabel.text = nil
     }
     
     func setupLayout() {
