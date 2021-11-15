@@ -31,4 +31,22 @@ extension UIImage {
                 }
             }.store(in: &cancellables)
     }
+    
+    static func fetchImageData(urlString: String, completion: @escaping (String?) -> ()) {
+        guard let imageURL = URL(string: urlString) else { DispatchQueue.main.async { completion(nil) }; return }
+        let request = URLRequest(url: imageURL)
+        URLSession.shared.dataTaskPublisher(for: request)
+            .tryMap { output -> Data in
+                return output.data
+            }.sink { result in
+                switch result {
+                    case let .success(data):
+                    let base64String = data.base64EncodedString(options: .endLineWithLineFeed)
+                    completion(base64String)
+                    case .failure:
+                        completion(nil)
+                }
+            }.store(in: &cancellables)
+    }
+    
 }

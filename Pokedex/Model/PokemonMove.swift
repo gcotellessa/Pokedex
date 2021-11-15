@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct PokemonMoveSetting: Codable {
+struct PokemonMoveSetting: Codable, Hashable {
     let move: PokemonMove
 }
 
-struct PokemonMove: Codable {
+struct PokemonMove: Codable, Hashable {
     let name: String
 }

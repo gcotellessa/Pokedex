@@ -32,7 +32,7 @@ class ImagesCell: UITableViewCell {
             let view = UIImageView()
             view.translatesAutoresizingMaskIntoConstraints = false
             view.contentMode = .scaleToFill
-    
+            
             UIImage.load(from: imageUrl) { image in
                 DispatchQueue.main.async { view.image = image }
             }

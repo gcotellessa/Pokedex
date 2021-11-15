@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PokemonStatSetting: Codable {
+struct PokemonStatSetting: Codable, Hashable {
     let baseStat: Int
     let effort: Int
     let stat: PokemonStat
@@ -18,6 +18,6 @@ struct PokemonStatSetting: Codable {
     }
 }
 
-struct PokemonStat: Codable {
+struct PokemonStat: Codable, Hashable {
     let name: String
 }

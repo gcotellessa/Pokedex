@@ -28,6 +28,9 @@
 		1325EB6B273B74FC00D44C30 /* PokemonListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1325EB6A273B74FC00D44C30 /* PokemonListCell.swift */; };
 		1325EB6D273B820400D44C30 /* PokemonDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1325EB6C273B820400D44C30 /* PokemonDetailVC.swift */; };
 		1325EB6F273BC2A300D44C30 /* UIImage+Load.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1325EB6E273BC2A300D44C30 /* UIImage+Load.swift */; };
+		1341176D2742DA0A00DDF13D /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1341176C2742DA0A00DDF13D /* Database.swift */; };
+		1341176F2742F31F00DDF13D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1341176E2742F31F00DDF13D /* Reachability.swift */; };
+		13D4A8E4274187E50090C6A6 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 13D4A8E3274187E50090C6A6 /* GRDB */; };
 		13E10932273D36770098FEBA /* PokemonTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E10931273D36770098FEBA /* PokemonTitleCell.swift */; };
 		13FC6C21273EC44D00062324 /* StatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FC6C20273EC44D00062324 /* StatCell.swift */; };
 		13FC6C24273EE11200062324 /* ImagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FC6C23273EE11200062324 /* ImagesCell.swift */; };
@@ -76,6 +79,8 @@
 		1325EB6A273B74FC00D44C30 /* PokemonListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListCell.swift; sourceTree = "<group>"; };
 		1325EB6C273B820400D44C30 /* PokemonDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailVC.swift; sourceTree = "<group>"; };
 		1325EB6E273BC2A300D44C30 /* UIImage+Load.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Load.swift"; sourceTree = "<group>"; };
+		1341176C2742DA0A00DDF13D /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		1341176E2742F31F00DDF13D /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		13E10931273D36770098FEBA /* PokemonTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTitleCell.swift; sourceTree = "<group>"; };
 		13FC6C20273EC44D00062324 /* StatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCell.swift; sourceTree = "<group>"; };
 		13FC6C23273EE11200062324 /* ImagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCell.swift; sourceTree = "<group>"; };
@@ -86,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13D4A8E4274187E50090C6A6 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +112,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		131B52742742998900C8955F /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				1341176C2742DA0A00DDF13D /* Database.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
 		1325EADC273B0B3500D44C30 = {
 			isa = PBXGroup;
 			children = (
@@ -129,11 +143,13 @@
 		1325EAE7273B0B3500D44C30 /* Pokedex */ = {
 			isa = PBXGroup;
 			children = (
+				131B52742742998900C8955F /* Database */,
 				1325EB69273B74D100D44C30 /* View */,
 				1325EB5F273B45A900D44C30 /* ViewModel */,
 				1325EB51273B224100D44C30 /* Model */,
 				1325EB66273B71CF00D44C30 /* Network */,
 				1325EB4E273B21B600D44C30 /* Extensions */,
+				134117702742F38900DDF13D /* Utils */,
 				1325EAE8273B0B3500D44C30 /* AppDelegate.swift */,
 				1325EAEA273B0B3500D44C30 /* SceneDelegate.swift */,
 				1325EAF1273B0B3700D44C30 /* Assets.xcassets */,
@@ -209,6 +225,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		134117702742F38900DDF13D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				1341176E2742F31F00DDF13D /* Reachability.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		13FC6C22273EDE9600062324 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +260,9 @@
 			dependencies = (
 			);
 			name = Pokedex;
+			packageProductDependencies = (
+				13D4A8E3274187E50090C6A6 /* GRDB */,
+			);
 			productName = Pokedex;
 			productReference = 1325EAE5273B0B3500D44C30 /* Pokedex.app */;
 			productType = "com.apple.product-type.application";
@@ -308,6 +335,9 @@
 				Base,
 			);
 			mainGroup = 1325EADC273B0B3500D44C30;
+			packageReferences = (
+				13D4A8E2274187E50090C6A6 /* XCRemoteSwiftPackageReference "GRDB" */,
+			);
 			productRefGroup = 1325EAE6273B0B3500D44C30 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -364,10 +394,12 @@
 				1325EB6F273BC2A300D44C30 /* UIImage+Load.swift in Sources */,
 				1325EB5C273B42AC00D44C30 /* PokemonStat.swift in Sources */,
 				1325EB58273B420300D44C30 /* PokemonImage.swift in Sources */,
+				1341176F2742F31F00DDF13D /* Reachability.swift in Sources */,
 				1325EB61273B460300D44C30 /* PokemonListViewModel.swift in Sources */,
 				1325EB68273B71F300D44C30 /* PokemonAPI.swift in Sources */,
 				13FC6C21273EC44D00062324 /* StatCell.swift in Sources */,
 				1325EB63273B54D600D44C30 /* ApiResponse.swift in Sources */,
+				1341176D2742DA0A00DDF13D /* Database.swift in Sources */,
 				1325EB5A273B425900D44C30 /* PokemonType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -726,6 +758,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		13D4A8E2274187E50090C6A6 /* XCRemoteSwiftPackageReference "GRDB" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		13D4A8E3274187E50090C6A6 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 13D4A8E2274187E50090C6A6 /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = GRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1325EADD273B0B3500D44C30 /* Project object */;
 }
