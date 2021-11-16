@@ -26,8 +26,3 @@ class Observable<T> {
         listener = closure
     }
 }
-
-protocol ObservableViewModelProtocol {
-    func requestData()
-    var pokemons: Observable<[Pokemon]> { get  set }
-}

@@ -7,6 +7,11 @@
 
 import Foundation
 
+protocol ObservableViewModelProtocol {
+    func requestData()
+    var pokemons: Observable<[Pokemon]> { get  set }
+}
+
 class PokemonListViewModel: ObservableViewModelProtocol {
     
     var pokemons: Observable<[Pokemon]> = Observable([])
