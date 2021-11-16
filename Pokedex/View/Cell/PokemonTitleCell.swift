@@ -59,9 +59,9 @@ class PokemonTitleCell: UITableViewCell {
             .height(120)
             .width(120)
         
-        UIImage.load(from: pokemonImageUrl ?? "") { [weak self] image in
-            DispatchQueue.main.async { self?.pokemonImageView.image = image }
-        }
+//        UIImage.load(from: pokemonImageUrl ?? "") { [weak self] image in
+//            DispatchQueue.main.async { self?.pokemonImageView.image = image }
+//        }
         
         contentView.addSubview(titleLabel)
         

@@ -33,9 +33,9 @@ class ImagesCell: UITableViewCell {
             view.translatesAutoresizingMaskIntoConstraints = false
             view.contentMode = .scaleToFill
             
-            UIImage.load(from: imageUrl) { image in
-                DispatchQueue.main.async { view.image = image }
-            }
+//            UIImage.load(from: imageUrl) { image in
+//                DispatchQueue.main.async { view.image = image }
+//            }
             
             contentView.addSubview(view)
             
