@@ -7,10 +7,10 @@
 
 import Foundation
 
-class PokemonListViewModel/*: ObservableObject*/ {
+class PokemonListViewModel: ObservableViewModelProtocol {
     
-//    @Published var pokemons: [Pokemon] = []
-    var pokemons: [Pokemon] = []
+    var pokemons: Observable<[Pokemon]> = Observable([])
+    var localPokemons: [Pokemon] = []
 
     var title: String { "Pokedex" }
     var isLoading: Bool = false
@@ -18,35 +18,35 @@ class PokemonListViewModel/*: ObservableObject*/ {
     var fetched = false
     
     func requestData() {
+        
         if !fetched {
             fetchDataFromLocalDB()
             fetched = true
         }
+        
         guard !isLoading else { return }
         isLoading = true
-//        PokemonAPI.requestPokemon { [weak self] result in
-//            guard let self = self else { return }
-//            switch result {
-//            case let .success(pokemons):
-//                let count = try? Database.shared.fetchCount()
-//                var filteredPokemons = pokemons.filter { pokemon in
-//                    pokemon.id > (count ?? 0)
-//                }
-//                try? Database.shared.savePokemons(&filteredPokemons)
-//                self.pokemons += filteredPokemons
-//                self.isLoading = false
-//            case let .failure(error):
-//                print(error)
-//                self.isLoading = false
-//                break
-//            }
-//        }
+        PokemonAPI.pokemons { result in
+            switch result {
+            case .success(let pokemons):
+                let count = try? Database.shared.fetchCount()
+                var filteredPokemons = pokemons.filter { $0.id > (count ?? 0) }
+                filteredPokemons.sort { s1, s2 in  s1.id < s2.id }
+                try? Database.shared.savePokemons(&filteredPokemons)
+                self.localPokemons += filteredPokemons
+                self.pokemons.value = self.localPokemons
+                self.isLoading = false
+            case .failure(let error):
+                print(error.localizedDescription)
+                self.isLoading = false
+            }
+        }
     }
     
     func fetchDataFromLocalDB() {
         guard !fetched else { return }
         if let pokemons = try? Database.shared.fetchPokemons() {
-//            self.pokemons += pokemons
+            self.localPokemons += pokemons
             fetched = true
         }
     }

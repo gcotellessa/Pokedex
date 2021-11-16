@@ -79,9 +79,9 @@ class PokemonListCell: UITableViewCell {
             .height(80)
             .width(80)
         
-//        UIImage.load(from: pokemonImageUrl ?? "") { [weak self] image in
-//            DispatchQueue.main.async { self?.pokemonImageView.image = image }
-//        }
+        UIImage.load(from: pokemonImageUrl ?? "") { [weak self] image in
+            DispatchQueue.main.async { self?.pokemonImageView.image = image }
+        }
         
         containerView.addSubview(titleLabel)
         

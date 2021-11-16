@@ -7,10 +7,10 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class API {
     static let baseURL = URL(string: "https://pokeapi.co/api/v2/")!
-//    static var cancellables = Set<AnyCancellable>()
     
     enum ItemType: String {
         case pokemons = "pokemon"
@@ -21,57 +21,90 @@ final class PokemonAPI: API {
     
     private static var pokemonResponse: APIResponse?
     
-//    static func requestPokemon(_ completion: @escaping (Result<[Pokemon], Error>) -> Swift.Void) {
-//        if #available(iOS 13.0, *) {
-//            requestPokemon(at: pokemonResponse?.next)?.flatMap { response in
-//                Publishers.Sequence(sequence: response.results.compactMap { pokemonDetails(from: $0.url) })
-//                    .flatMap { $0 }
-//                    .collect()
-//            }
-//            .eraseToAnyPublisher()
-//            .sink { result in
-//                completion(result.map { res in res.sorted { $0.id < $1.id } })
-//            }.store(in: &cancellables)
-//        } else {
-//            // Fallback on earlier versions
-//        }
-//    }
+    static func apiResponse(urlString: String?, _ completion: @escaping (Result<APIResponse, Error>) -> ()) {
+        
+        let finalURL: URL
+
+        if let urlString = urlString, let url = URL(string: urlString) {
+            finalURL = url
+        } else {
+            finalURL = baseURL.appendingPathComponent(PokemonAPI.ItemType.pokemons.rawValue)
+        }
+        
+        let task = URLSession.shared.dataTask(with: finalURL) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            } else if let data = data {
+                do {
+                    let decodedResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+                    pokemonResponse = decodedResponse
+                    completion(.success(decodedResponse))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+        }
+        
+        task.resume()
+    }
+    
+    static func pokemons(_ completion: @escaping (Result<[Pokemon], Error>) -> ()) {
+        
+        apiResponse(urlString: pokemonResponse?.next) { result in
+            
+            switch result {
+            case .success(let apiResponse):
+                let group = DispatchGroup()
+                
+                var pokemons: [Pokemon] = []
+                
+                apiResponse.results.forEach { apiItem in
+                    group.enter()
+                    
+                    pokemon(urlString: apiItem.url) { result in
+                        group.leave()
+                        switch result {
+                        case .success(let pokemon):
+                            pokemons.append(pokemon)
+                        case .failure(_):
+                            break
+                        }
+                    }
+                }
+                
+                group.notify(queue: .main, execute: {
+                    completion(.success(pokemons))
+                })
+                
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    static func pokemon(urlString: String, _ completion: @escaping (Result<Pokemon, Error>) -> ()) {
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            } else if let data = data {
+                do {
+                    let pokemon = try JSONDecoder().decode(Pokemon.self, from: data)
+                    completion(.success(pokemon))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+        }
+        
+        task.resume()
+    }
+    
 }
 
-extension PokemonAPI {
-    
-//    private static func pokemonDetails(from urlString: String) -> AnyPublisher<Pokemon, Error>? {
-//        guard let url = URL(string: urlString) else { return nil }
-//        let request = URLRequest(url: url)
-//        return NetworkAgent.execute(request)
-//    }
-    
-//    private static func requestPokemon(at urlString: String?) -> AnyPublisher<APIResponse, Error>? {
-//        let finalURL: URL
-//
-//        if let urlString = urlString, let url = URL(string: urlString) {
-//            finalURL = url
-//        } else {
-//            finalURL = baseURL.appendingPathComponent(PokemonAPI.ItemType.pokemons.rawValue)
-//        }
-//
-//        let request = URLRequest(url: finalURL)
-//
-//        return NetworkAgent.execute(request).map { (response: APIResponse) -> APIResponse in
-//            self.pokemonResponse = response
-//            return response
-//        }.eraseToAnyPublisher()
-//    }
-}
 
-struct NetworkAgent {
-//    static func execute<T: Decodable>(_ request: URLRequest) -> AnyPublisher<T, Error> {
-//        URLSession.shared.dataTaskPublisher(for: request)
-//            .tryMap {
-//                return $0.data
-//            }
-//            .decode(type: T.self, decoder: JSONDecoder())
-//            .eraseToAnyPublisher()
-//    }
-}
 

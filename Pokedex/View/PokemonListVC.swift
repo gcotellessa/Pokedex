@@ -11,7 +11,6 @@ import Combine
 class PokemonListVC: UIViewController {
     
     var viewModel = PokemonListViewModel()
-//    private var cancellables: Set<AnyCancellable> = []
     
     private lazy var safeAreaView: UIStackView = {
         let view = UIStackView()
@@ -31,8 +30,8 @@ class PokemonListVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         bindViewModel()
+        viewModel.requestData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,11 +39,9 @@ class PokemonListVC: UIViewController {
     }
     
     private func bindViewModel() {
-//        viewModel.$pokemons
-//           .receive(on: DispatchQueue.main)
-//           .sink { _ in
-//               self.tableView.reloadData()
-//           }.store(in: &cancellables)
+        viewModel.pokemons.bind { (_) in
+            self.tableView.reloadData()
+        }
     }
     
     private func setUpLayout() {
@@ -73,14 +70,14 @@ class PokemonListVC: UIViewController {
 extension PokemonListVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.pokemons.count
+        return viewModel.pokemons.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PokemonListCell.identifier, for: indexPath) as? PokemonListCell
-        cell?.pokemonName = viewModel.pokemons[indexPath.row].name
-        cell?.pokemonId = "#\(viewModel.pokemons[indexPath.row].id.description)"
-        cell?.pokemonImageUrl = viewModel.pokemons[indexPath.row].sprites.frontDefault
+        cell?.pokemonName = viewModel.pokemons.value[indexPath.row].name
+        cell?.pokemonId = "#\(viewModel.pokemons.value[indexPath.row].id.description)"
+        cell?.pokemonImageUrl = viewModel.pokemons.value[indexPath.row].sprites.frontDefault
         cell?.setupLayout()
         cell?.selectionStyle = .none
         return cell ?? UITableViewCell()
@@ -88,7 +85,7 @@ extension PokemonListVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = PokemonDetailVC()
-        vc.pokemon = viewModel.pokemons[indexPath.row]
+        vc.pokemon = viewModel.pokemons.value[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
     }
     

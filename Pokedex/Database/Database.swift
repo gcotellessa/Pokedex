@@ -48,8 +48,6 @@ final class Database {
 
 extension Database {
     
-//    private static var cancellables = Set<AnyCancellable>()
-    
     func savePokemons(_ pokemons: inout [Pokemon]) throws {
         for var pokemon in pokemons {
             let images = ["frontDefault" : pokemon.sprites.frontDefault,
@@ -58,24 +56,24 @@ extension Database {
                           "backShiny" : pokemon.sprites.backShiny]
             
             images.forEach { image in
-//                UIImage.fetchImageData(urlString: image.value ?? "") { dataString in
-//                    switch image.key {
-//                    case "frontDefault":
-//                        pokemon.sprites.frontDefault = dataString
-//                    case "backDefault":
-//                        pokemon.sprites.backDefault = dataString
-//                    case "frontShiny":
-//                        pokemon.sprites.frontShiny = dataString
-//                    case "backShiny":
-//                        pokemon.sprites.backShiny = dataString
-//                    default:
-//                        break
-//                    }
-//                    
-//                    try? self.dbWriter.write { db in
-//                        try? pokemon.save(db)
-//                    }
-//                }
+                UIImage.fetchImageData(urlString: image.value ?? "") { dataString in
+                    switch image.key {
+                    case "frontDefault":
+                        pokemon.sprites.frontDefault = dataString
+                    case "backDefault":
+                        pokemon.sprites.backDefault = dataString
+                    case "frontShiny":
+                        pokemon.sprites.frontShiny = dataString
+                    case "backShiny":
+                        pokemon.sprites.backShiny = dataString
+                    default:
+                        break
+                    }
+
+                    try? self.dbWriter.write { db in
+                        try? pokemon.save(db)
+                    }
+                }
             }
         }
     }
