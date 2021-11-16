@@ -17,23 +17,28 @@ class PokemonListViewModel: ObservableObject {
     var fetched = false
     
     func requestData() {
-        if Reachability().isConnectedToNetwork() {
-            guard !isLoading else { return }
-            isLoading = true
-            PokemonAPI.requestPokemon { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case var .success(pokemons):
-                    try? Database.shared.savePokemons(&pokemons)
-                    self.pokemons += pokemons
-                    self.isLoading = false
-                case let .failure(error):
-                    print(error)
-                    break
-                }
-            }
-        } else {
+        if !fetched {
             fetchDataFromLocalDB()
+            fetched = true
+        }
+        guard !isLoading else { return }
+        isLoading = true
+        PokemonAPI.requestPokemon { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case let .success(pokemons):
+                let count = try? Database.shared.fetchCount()
+                var filteredPokemons = pokemons.filter { pokemon in
+                    pokemon.id > (count ?? 0)
+                }
+                try? Database.shared.savePokemons(&filteredPokemons)
+                self.pokemons += filteredPokemons
+                self.isLoading = false
+            case let .failure(error):
+                print(error)
+                self.isLoading = false
+                break
+            }
         }
     }
     

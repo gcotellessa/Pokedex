@@ -92,6 +92,10 @@ extension PokemonListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard Reachability().isConnectedToNetwork() else {
+            viewModel.fetchDataFromLocalDB()
+            return
+        }
         let isReachingEnd = scrollView.contentOffset.y >= 0
         && scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height)
         if isReachingEnd { viewModel.requestData() }

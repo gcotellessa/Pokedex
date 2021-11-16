@@ -79,6 +79,12 @@ extension Database {
             }
         }
     }
+    
+    func cleanAllPokemonsList() throws {
+        try dbWriter.write { db in
+            _ = try Pokemon.deleteAll(db)
+        }
+    }
 
     func fetchPokemons() throws -> [Pokemon] {
         try dbWriter.read { db in
@@ -86,10 +92,16 @@ extension Database {
         }
     }
     
+    func fetchCount() throws -> Int {
+        try dbWriter.write { db in
+            return try Pokemon.fetchCount(db)
+        }
+    }
+    
 }
 
 extension Database {
-    /// The database for the application
+
     static let shared = makeShared()
     
     private static func makeShared() -> Database {

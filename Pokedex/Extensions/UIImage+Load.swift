@@ -14,6 +14,12 @@ extension UIImage {
     private static var cancellables = Set<AnyCancellable>()
     
     static func load(from urlString: String, _ completion: @escaping (UIImage?) -> ()) {
+        
+        if let decodedData = Data(base64Encoded: urlString, options: NSData.Base64DecodingOptions()) {
+            completion(UIImage(data: decodedData))
+            return
+        }
+        
         guard let imageURL = URL(string: urlString) else { DispatchQueue.main.async { completion(nil) }; return }
         let request = URLRequest(url: imageURL)
         
