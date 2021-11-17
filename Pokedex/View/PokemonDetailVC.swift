@@ -73,6 +73,8 @@ extension PokemonDetailVC: UITableViewDelegate, UITableViewDataSource {
             if let pokemon = pokemon {
                 cell.pokemonImageUrl = pokemon.sprites.frontDefault
                 cell.pokemonName = pokemon.name
+                cell.pokemonWeight = "\(String(format: "%.1f", Double(pokemon.weight) / 10)) Kg"
+                cell.pokemonHeight = "\(String(format: "%.1f", Double(pokemon.height) / 10)) m"
                 pokemon.types.forEach { type in
                     cell.pokemonDescription += "\(type.type.name)\n"
                 }
@@ -100,7 +102,7 @@ extension PokemonDetailVC: UITableViewDelegate, UITableViewDataSource {
             
             if let pokemon = pokemon {
                 cell.statKey = pokemon.stats[indexPath.row - 2].stat.name
-                cell.statValue = "\(pokemon.stats[indexPath.row - 2].baseStat) / 100"
+                cell.statValue = "\(pokemon.stats[indexPath.row - 2].baseStat)"
             }
             
             cell.setupLayout()

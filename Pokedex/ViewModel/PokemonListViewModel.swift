@@ -30,6 +30,7 @@ class PokemonListViewModel: ObservableViewModelProtocol {
         }
         
         guard !isLoading else { return }
+        
         isLoading = true
         PokemonAPI.pokemons { result in
             switch result {

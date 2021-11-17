@@ -104,11 +104,7 @@ extension PokemonListVC: UITableViewDelegate, UITableViewDataSource {
         let lastRowIndex = tableView.numberOfRows(inSection: lastSectionIndex) - 1
         if indexPath.section ==  lastSectionIndex && indexPath.row == lastRowIndex {
             let spinner = UIActivityIndicatorView()
-            if #available(iOS 13.0, *) {
-                spinner.style = .large
-            } else {
-                spinner.style = .whiteLarge
-            }
+            spinner.style = .whiteLarge
             spinner.startAnimating()
             spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(60))
 

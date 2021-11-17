@@ -35,9 +35,27 @@ class PokemonTitleCell: UITableViewCell {
         return view
     }()
     
+    private lazy var widthLabel: UILabel = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.textColor = .gray
+        view.numberOfLines = 0
+        return view
+    }()
+    
+    private lazy var heightLabel: UILabel = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.textColor = .gray
+        view.numberOfLines = 0
+        return view
+    }()
+    
     var pokemonImageUrl: String?
     var pokemonName: String?
     var pokemonDescription = ""
+    var pokemonWeight: String?
+    var pokemonHeight: String?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -48,6 +66,9 @@ class PokemonTitleCell: UITableViewCell {
         pokemonImageView.image = nil
         titleLabel.text = nil
         descriptionLabel.text = nil
+        widthLabel.text = nil
+        heightLabel.text = nil
+        pokemonDescription = ""
     }
     
     func setupLayout() {
@@ -79,8 +100,24 @@ class PokemonTitleCell: UITableViewCell {
         
         descriptionLabel.text = pokemonDescription
         
+        contentView.addSubview(heightLabel)
+        
+        heightLabel
+            .top(2, superView: descriptionLabel.bottomAnchor)
+            .trailing(-16, superView: contentView.trailingAnchor)
+        
+        heightLabel.text = pokemonHeight ?? "missing height"
+        
+        contentView.addSubview(widthLabel)
+        
+        widthLabel
+            .top(10, superView: heightLabel.bottomAnchor)
+            .trailing(-16, superView: contentView.trailingAnchor)
+        
+        widthLabel.text = pokemonWeight ?? "missing width"
+        
         contentView
-            .bottom(16, superView: descriptionLabel.bottomAnchor)
+            .bottom(16, superView: widthLabel.bottomAnchor)
     }
 
 }
